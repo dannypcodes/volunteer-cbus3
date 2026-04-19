@@ -268,6 +268,12 @@ export default function App() {
       createdAt: Date.now(),
       authorId: user.uid
     };
+    
+    console.log("Attempting to save to path:", 'artifacts', appId, 'public', 'data', 'opportunities');
+    console.log("Data to save:", newOp);
+    console.log("User authenticated:", !!user);
+    console.log("User UID:", user?.uid);
+    
     try {
       await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'opportunities'), newOp);
       console.log("Successfully saved opportunity:", newOp);
