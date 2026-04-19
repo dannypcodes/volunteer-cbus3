@@ -1,10 +1,13 @@
 {
   "files": {
+    "main.css": "/volunteer-cbus3/static/css/main.d5ef8bfb.css",
     "main.js": "/volunteer-cbus3/static/js/main.1be66b0a.js",
     "index.html": "/volunteer-cbus3/index.html",
+    "main.d5ef8bfb.css.map": "/volunteer-cbus3/static/css/main.d5ef8bfb.css.map",
     "main.1be66b0a.js.map": "/volunteer-cbus3/static/js/main.1be66b0a.js.map"
   },
   "entrypoints": [
+    "static/css/main.d5ef8bfb.css",
     "static/js/main.1be66b0a.js"
   ]
 }
