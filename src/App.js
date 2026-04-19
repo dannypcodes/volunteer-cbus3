@@ -34,10 +34,14 @@ const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__f
 let app, auth, db;
 const hasValidFirebaseConfig = firebaseConfig.apiKey && firebaseConfig.projectId;
 
-if (hasValidFirebaseConfig) {
-  app = initializeApp(firebaseConfig);
-  auth = getAuth(app);
-  db = getFirestore(app);
+try {
+  if (hasValidFirebaseConfig) {
+    app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+  }
+} catch (error) {
+  console.error("Firebase initialization error:", error);
 }
 
 // eslint-disable-next-line no-undef
@@ -85,27 +89,34 @@ export default function App() {
   // --- AUTHENTICATION ---
   useEffect(() => {
     if (!hasValidFirebaseConfig) {
+      console.log("Firebase not configured, running in demo mode");
       setUser({ anonymous: true }); // Mock user for offline mode
       setIsLoading(false);
       return;
     }
 
-    const initAuth = async () => {
-      try {
-        // eslint-disable-next-line no-undef
-        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+    try {
+      const initAuth = async () => {
+        try {
           // eslint-disable-next-line no-undef
-          await signInWithCustomToken(auth, __initial_auth_token);
-        } else {
-          await signInAnonymously(auth);
+          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+            // eslint-disable-next-line no-undef
+            await signInWithCustomToken(auth, __initial_auth_token);
+          } else {
+            await signInAnonymously(auth);
+          }
+        } catch (err) {
+          console.error("Auth error:", err);
         }
-      } catch (err) {
-        console.error("Auth error:", err);
-      }
-    };
-    initAuth();
-    const unsubscribe = onAuthStateChanged(auth, setUser);
-    return () => unsubscribe();
+      };
+      initAuth();
+      const unsubscribe = onAuthStateChanged(auth, setUser);
+      return () => unsubscribe();
+    } catch (error) {
+      console.error("Setup error:", error);
+      setUser({ anonymous: true });
+      setIsLoading(false);
+    }
   }, []);
 
   // --- DATA SYNC & ANALYTICS ---
