@@ -92,7 +92,7 @@ export default function App() {
     
     if (!hasValidFirebaseConfig) {
       console.log("No Firebase config, running in demo mode");
-      setUser({ anonymous: true });
+      setUser({ uid: 'demo-user-' + Math.random().toString(36).substr(2, 9), anonymous: true });
       setIsLoading(false);
       return;
     }
@@ -108,7 +108,7 @@ export default function App() {
         }
       } catch (err) {
         console.error("Auth error:", err);
-        setUser({ anonymous: true });
+        setUser({ uid: 'demo-user-' + Math.random().toString(36).substr(2, 9), anonymous: true });
         setIsLoading(false);
       }
     };
@@ -123,7 +123,7 @@ export default function App() {
       return () => unsubscribe();
     } catch (error) {
       console.error("Setup error:", error);
-      setUser({ anonymous: true });
+      setUser({ uid: 'demo-user-' + Math.random().toString(36).substr(2, 9), anonymous: true });
       setIsLoading(false);
     }
 
@@ -131,7 +131,7 @@ export default function App() {
     const timeout = setTimeout(() => {
       console.log("Auth timeout, setting loading to false");
       setIsLoading(false);
-      if (!user) setUser({ anonymous: true });
+      if (!user) setUser({ uid: 'demo-user-' + Math.random().toString(36).substr(2, 9), anonymous: true });
     }, 3000);
 
     return () => clearTimeout(timeout);
@@ -241,12 +241,8 @@ export default function App() {
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
-    if (!user) {
+    if (!user || !user.uid) {
       alert('You must be logged in to post an opportunity.');
-      return;
-    }
-    if (!user.uid) {
-      alert('Authentication in progress. Please try again in a moment.');
       return;
     }
     if (!hasValidFirebaseConfig) {
