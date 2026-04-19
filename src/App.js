@@ -245,6 +245,10 @@ export default function App() {
       alert('You must be logged in to post an opportunity.');
       return;
     }
+    if (!user.uid) {
+      alert('Authentication in progress. Please try again in a moment.');
+      return;
+    }
     if (!hasValidFirebaseConfig) {
       alert('Submissions require Firebase to be configured. Please contact the administrator.');
       return;
