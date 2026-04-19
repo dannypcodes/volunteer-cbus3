@@ -148,16 +148,22 @@ export default function App() {
     const opportunitiesRef = collection(db, 'artifacts', appId, 'public', 'data', 'opportunities');
     const unsubOps = onSnapshot(opportunitiesRef, (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      console.log("Opportunities synced:", data);
       setOpportunities(data);
       setIsLoading(false);
+    }, (error) => {
+      console.error("Opportunities listener error:", error);
     });
 
     // 2. Sync Global Stats
     const statsRef = doc(db, 'artifacts', appId, 'public', 'data', 'siteMetrics', 'global');
     const unsubStats = onSnapshot(statsRef, (docSnap) => {
       if (docSnap.exists()) {
+        console.log("Stats synced:", docSnap.data());
         setSiteStats(docSnap.data());
       }
+    }, (error) => {
+      console.error("Stats listener error:", error);
     });
 
     // 3. Track Page View
