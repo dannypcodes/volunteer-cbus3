@@ -23,12 +23,12 @@ import {
 // --- CONFIGURATION ---
 // eslint-disable-next-line no-undef
 const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+  apiKey: "AIzaSyAVAC3X64OpECVXvNQKip9arp8MPzZkMcs",
+  authDomain: "volunteer-cbus.firebaseapp.com",
+  projectId: "volunteer-cbus",
+  storageBucket: "volunteer-cbus.firebasestorage.app",
+  messagingSenderId: "603815679440",
+  appId: "1:603815679440:web:6a40d20cd197c4c58855d5"
 };
 
 let app, auth, db;
@@ -241,7 +241,14 @@ export default function App() {
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
-    if (!user || !hasValidFirebaseConfig) return;
+    if (!user) {
+      alert('You must be logged in to post an opportunity.');
+      return;
+    }
+    if (!hasValidFirebaseConfig) {
+      alert('Submissions require Firebase to be configured. Please contact the administrator.');
+      return;
+    }
     const finalUrl = formatUrl(formData.externalUrl);
     const finalImage = formData.image || DEFAULT_IMAGE;
     const newOp = { 
@@ -257,7 +264,10 @@ export default function App() {
       await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'opportunities'), newOp);
       setFormData({ title: '', company: '', location: '', description: '', category: 'Operations', image: '', externalUrl: '', schedule: 'Flexible' });
       setView('submitted-success');
-    } catch (err) { console.error(err); }
+    } catch (err) { 
+      console.error(err);
+      alert('Error submitting opportunity: ' + err.message);
+    }
   };
 
   const approveOpportunity = async (id) => {

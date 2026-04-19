@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { initializeApp } from 'firebase/app';
+import { getAnalytics } from "firebase/analytics";
 import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from 'firebase/auth';
 import { 
   getFirestore, 
@@ -22,8 +23,20 @@ import {
 } from 'lucide-react';
 
 // --- CONFIGURATION ---
-const firebaseConfig = JSON.parse(__firebase_config);
+const firebaseConfig = typeof __firebase_config !== 'undefined'
+  ? JSON.parse(__firebase_config)
+  : {
+  apiKey: "AIzaSyAVAC3X64OpECVXvNQKip9arp8MPzZkMcs",
+  authDomain: "volunteer-cbus.firebaseapp.com",
+  projectId: "volunteer-cbus",
+  storageBucket: "volunteer-cbus.firebasestorage.app",
+  messagingSenderId: "603815679440",
+  appId: "1:603815679440:web:6a40d20cd197c4c58855d5",
+  measurementId: "G-48EML32BMH"
+    };
+
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
