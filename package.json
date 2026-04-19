@@ -2,7 +2,7 @@
   "name": "volunteer-cbus",
   "version": "1.0.0",
   "private": true,
-  "homepage": "https://dannypcodes.github.io/volunteer-cbus",
+  "homepage": "https://dannypcodes.github.io/volunteer-cbus3",
   "description": "A community hub for finding volunteer opportunities in Columbus, Ohio.",
   "dependencies": {
     "firebase": "^10.8.0",
