@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/volunteer-cbus3/static/css/main.d5ef8bfb.css",
-    "main.js": "/volunteer-cbus3/static/js/main.116e0dc2.js",
+    "main.js": "/volunteer-cbus3/static/js/main.94054549.js",
     "index.html": "/volunteer-cbus3/index.html",
     "main.d5ef8bfb.css.map": "/volunteer-cbus3/static/css/main.d5ef8bfb.css.map",
-    "main.116e0dc2.js.map": "/volunteer-cbus3/static/js/main.116e0dc2.js.map"
+    "main.94054549.js.map": "/volunteer-cbus3/static/js/main.94054549.js.map"
   },
   "entrypoints": [
     "static/css/main.d5ef8bfb.css",
-    "static/js/main.116e0dc2.js"
+    "static/js/main.94054549.js"
   ]
 }
