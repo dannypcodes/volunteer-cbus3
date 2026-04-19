@@ -148,11 +148,13 @@ export default function App() {
     const opportunitiesRef = collection(db, 'artifacts', appId, 'public', 'data', 'opportunities');
     const unsubOps = onSnapshot(opportunitiesRef, (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      console.log("Opportunities synced:", data);
+      console.log("Opportunities loaded from Firestore:", data.length, "items");
+      console.log("Opportunities data:", data);
       setOpportunities(data);
       setIsLoading(false);
     }, (error) => {
       console.error("Opportunities listener error:", error);
+      setIsLoading(false);
     });
 
     // 2. Sync Global Stats
@@ -268,10 +270,11 @@ export default function App() {
     };
     try {
       await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'opportunities'), newOp);
+      console.log("Successfully saved opportunity:", newOp);
       setFormData({ title: '', company: '', location: '', description: '', category: 'Operations', image: '', externalUrl: '', schedule: 'Flexible' });
       setView('submitted-success');
     } catch (err) { 
-      console.error(err);
+      console.error("Error saving opportunity:", err);
       alert('Error submitting opportunity: ' + err.message);
     }
   };
