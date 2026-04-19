@@ -88,35 +88,53 @@ export default function App() {
 
   // --- AUTHENTICATION ---
   useEffect(() => {
+    console.log("Auth effect starting, hasValidFirebaseConfig:", hasValidFirebaseConfig);
+    
     if (!hasValidFirebaseConfig) {
-      console.log("Firebase not configured, running in demo mode");
-      setUser({ anonymous: true }); // Mock user for offline mode
+      console.log("No Firebase config, running in demo mode");
+      setUser({ anonymous: true });
       setIsLoading(false);
       return;
     }
 
-    try {
-      const initAuth = async () => {
-        try {
+    const initAuth = async () => {
+      try {
+        // eslint-disable-next-line no-undef
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
           // eslint-disable-next-line no-undef
-          if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-            // eslint-disable-next-line no-undef
-            await signInWithCustomToken(auth, __initial_auth_token);
-          } else {
-            await signInAnonymously(auth);
-          }
-        } catch (err) {
-          console.error("Auth error:", err);
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
         }
-      };
+      } catch (err) {
+        console.error("Auth error:", err);
+        setUser({ anonymous: true });
+        setIsLoading(false);
+      }
+    };
+
+    try {
       initAuth();
-      const unsubscribe = onAuthStateChanged(auth, setUser);
+      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        console.log("Auth state changed:", currentUser);
+        setUser(currentUser);
+        setIsLoading(false);
+      });
       return () => unsubscribe();
     } catch (error) {
       console.error("Setup error:", error);
       setUser({ anonymous: true });
       setIsLoading(false);
     }
+
+    // Fallback timeout - ensure we stop loading after 3 seconds
+    const timeout = setTimeout(() => {
+      console.log("Auth timeout, setting loading to false");
+      setIsLoading(false);
+      if (!user) setUser({ anonymous: true });
+    }, 3000);
+
+    return () => clearTimeout(timeout);
   }, []);
 
   // --- DATA SYNC & ANALYTICS ---
